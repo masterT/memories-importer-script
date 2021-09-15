@@ -1,6 +1,6 @@
 # Memories Importer Script
 
-Simple `bash` script to import media using [elodie](https://github.com/jmathai/elodie).
+Simple `bash` script to import media using [Elodie](https://github.com/jmathai/elodie).
 
 Usage:
 

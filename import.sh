@@ -21,8 +21,7 @@ imports_relative_path="imports"
 import_relative_path="imports/$now"
 import_path="$source_path/$import_relative_path"
 import_log_path="$import_path/import.log"
-
-echo "Import $now"
+lockfile_name=".import.lockfile"
 
 # Check that elodie script is available.
 if [ -z $(which $elodie) ]; then
@@ -40,17 +39,17 @@ if [ ! -d $destination_path ]; then
 fi
 
 # Verify there is something to import else, exit.
-number_import_files=$(ls 2>/dev/null -Ub1 /mnt/data/memories/import/!(imports) | wc -l)
+number_import_files=$(ls 2>/dev/null -Ub1 /mnt/data/memories/import/!(imports|.import.lockfile) | wc -l)
 if [ $number_import_files -eq 0 ]; then
-  echo "Nothing to import."
   exit 0
 fi
 
 # Create import directory.
 mkdir -p --verbose $import_path
 
-# Move all file and directory in import directory except imports directory.
-mv --verbose $source_path/!($imports_relative_path) $import_path
+# Move all file and directory in import directory except lock file and imports directory.
+mv --verbose $source_path/!($imports_relative_path|$lockfile_name) $import_path
+# mv --verbose $import_path/.[^.]* $import_directory
 
 # Import.
 $elodie import \
